@@ -31,7 +31,7 @@ namespace BethanysPieShopHRM.Api
 
             services.AddCors(options =>
             {
-                options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader());
+                options.AddPolicy("Open", builder => builder.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
             });
 
             services.AddControllers();
@@ -50,11 +50,12 @@ namespace BethanysPieShopHRM.Api
 
             app.UseRouting();
 
+            app.UseCors("Open");
+
             app.UseAuthentication();
 
             app.UseAuthorization();
 
-            app.UseCors("Open");
 
             app.UseEndpoints(endpoints =>
             {

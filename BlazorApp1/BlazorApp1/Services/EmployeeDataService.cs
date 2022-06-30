@@ -19,6 +19,34 @@ namespace BethanysPieShopHRM.App.Services
             _httpClient = httpClient;
         }
 
+        public async Task<Employee> AddEmployee(Employee employee)
+        {
+            //var employeeJson =
+            //    new StringContent(JsonSerializer.Serialize(employee), Encoding.UTF8, "application/json");
+            //var response = await _httpClient.PostAsync("api/employee", employeeJson);
+
+            var response = await _httpClient.PostAsJsonAsync("api/employee", employee);
+            if (response.IsSuccessStatusCode)
+            {
+                return await JsonSerializer.DeserializeAsync<Employee>(await response.Content.ReadAsStreamAsync());
+            }
+
+            return null;
+        }
+
+        public async Task UpdateEmployee(Employee employee)
+        {
+            var employeeJson =
+                new StringContent(JsonSerializer.Serialize(employee), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync("api/employee", employeeJson);
+        }
+
+        public async Task DeleteEmployee(int employeeId)
+        {
+            await _httpClient.DeleteAsync($"api/employee/{employeeId}");
+        }
+
         public async Task<IEnumerable<Employee>> GetAllEmployees()
         {
             return await _httpClient.GetFromJsonAsync<IEnumerable<Employee>>($"api/employee");
